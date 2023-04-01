@@ -12,7 +12,7 @@ type BuilderOptions = {
 export const makeTableBuilder =
   ({ database, tablePrefix }: BuilderOptions) =>
   <T extends string>(options: Options<T>) => {
-    const table = `[${database}].${options.table}`;
+    const table = `${database}.${options.table}`;
 
     const prefix = tablePrefix ?? '';
 
@@ -20,7 +20,7 @@ export const makeTableBuilder =
 
     const alias = options.alias ?? defaultAlias;
 
-    const tableWithAlias = `${table} as [${alias}]`;
+    const tableWithAlias = `${table} as ${alias}`;
 
     const columns = options.columns.reduce((accumulator, current) => {
       return {

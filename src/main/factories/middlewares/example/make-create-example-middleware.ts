@@ -1,5 +1,5 @@
 import { DbCreateExample } from '@/data/usecases/db/example';
-import { ExampleRepository } from '@/infra/db/mysql/example-database';
+import { ExampleRepository } from '@/infra/db/mysql/whatsapp/users/internal-users';
 import { CreateExampleMiddleware } from '@/presentation/middlewares';
 import { logger, rollbackAll } from '@/util';
 

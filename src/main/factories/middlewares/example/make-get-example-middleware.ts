@@ -1,5 +1,5 @@
 import { DbGetExample } from '@/data/usecases/db/example';
-import { ExampleRepository } from '@/infra/db/mysql/example-database';
+import { ExampleRepository } from '@/infra/db/mysql/whatsapp/users/internal-users';
 import { GetExampleMiddleware } from '@/presentation/middlewares/example';
 import { logger } from '@/util';
 
