@@ -1,12 +1,15 @@
-# Microservice
+# Microservice - WhatsApp
 
-Project description here.
+This project holds a chatbot to sale products and events, it can use to get more information about the company to.
 
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Features
 
-- New feature.
+- Create new company to use chatbot.
+- Create products and events.
+- Control yours sales.
+- Integration with whatsapp to sale.
 
 ## Documentation
 
@@ -66,4 +69,4 @@ To run this project, you will need to add the following environment variables to
 
 ## Authors
 
-- [@lucassm02](https://github.com/lucassm02)
+- [@jeancigoli](https://github.com/JeanCigoli)
