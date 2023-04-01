@@ -4,11 +4,7 @@ import {
   HttpResponse,
 } from '@/data/protocols/http/adapters';
 import { logger } from '@/util';
-import { apmSpan } from '@/util/observability/apm';
-import {
-  datoraHttpLogger,
-  logger as customLogger,
-} from '@/util/observability/loggers/decorators';
+import { logger as customLogger } from '@/util/observability/loggers/decorators';
 import Agent from 'agentkeepalive';
 import { AxiosInstance } from 'axios';
 import FormData from 'form-data';
@@ -50,16 +46,10 @@ export class FormDataRequestAdapter implements HttpClient {
     });
   }
 
-  @datoraHttpLogger()
   @customLogger({
     options: decorators.options,
     input: decorators.params,
     output: decorators.result,
-  })
-  @apmSpan({
-    options: decorators.options,
-    params: decorators.params,
-    result: decorators.result,
   })
   async request(data: HttpRequest): Promise<HttpResponse> {
     const formData = new FormData();

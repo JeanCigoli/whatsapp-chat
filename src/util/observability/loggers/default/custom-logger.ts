@@ -1,16 +1,11 @@
 import pkg from '@/../package.json';
-import { createMongoLog } from '@/main/facades';
-import { ELASTICSEARCH, LOGGER } from '@/util/constants';
-import ecsFormat from '@elastic/ecs-winston-format';
+import { LOGGER } from '@/util/constants';
+import { generateUuid } from '@/util/uuid';
 import path from 'path';
 import { Logger, createLogger, format, transports } from 'winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
-import { ElasticsearchTransport } from 'winston-elasticsearch';
 
-import { elasticAPM, getAPMTransactionIds } from '../../apm';
-import { defaultIndexTemplate } from './elasticsearch';
 import { cli, standard } from './formats';
-import { elasticSearchTransformer } from './transformer/elasticsearch-transformer';
 import { GenericTransport } from './transports';
 
 type LogParams = {
@@ -28,8 +23,6 @@ type LogParams = {
   meta?: object;
   [key: string]: unknown;
 };
-
-const apm = elasticAPM().getAPM();
 
 const { combine, timestamp, colorize } = format;
 
@@ -57,42 +50,6 @@ export class CustomLogger {
         }),
       ],
     });
-
-    if (ELASTICSEARCH.ENABLED) {
-      const esClientOpts = {
-        node: ELASTICSEARCH.SERVER_URL,
-        auth: {
-          username: ELASTICSEARCH.USERNAME,
-          password: ELASTICSEARCH.PASSWORD,
-        },
-      };
-      this.logger.add(
-        new ElasticsearchTransport({
-          apm,
-          level: 'http',
-          index: 'application-log',
-          indexTemplate: defaultIndexTemplate,
-          dataStream: true,
-          useTransformer: true,
-          transformer: elasticSearchTransformer,
-          format: ecsFormat({
-            apmIntegration: true,
-            convertErr: true,
-          }),
-          clientOpts: esClientOpts,
-        })
-      );
-    }
-
-    if (LOGGER.DB.ENABLED) {
-      this.logger.add(
-        new GenericTransport({
-          level: 'verbose',
-          format: combine(defaultTimestampFormat, standard),
-          receiver: createMongoLog,
-        })
-      );
-    }
   }
 
   public static getInstance(): CustomLogger {
@@ -108,16 +65,9 @@ export class CustomLogger {
   public log(params: LogParams | Error): void {
     const application = { name: pkg.name ?? 'nodejs-application' };
 
-    const ids = getAPMTransactionIds();
-
     if (params instanceof Error) {
-      if (apm) {
-        apm.captureError(params);
-      }
-
       this.logger.log({
-        traceId: ids?.traceId,
-        transactionId: ids?.transactionId,
+        traceId: generateUuid(),
         application,
         name: params.name,
         message: params.message,
@@ -131,8 +81,7 @@ export class CustomLogger {
     const { level, message, ...rest } = params;
 
     this.logger.log({
-      traceId: ids?.traceId,
-      transactionId: ids?.transactionId,
+      traceId: generateUuid(),
       application,
       message,
       level: <string>level,

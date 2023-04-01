@@ -2,7 +2,7 @@ import {
   CreateExampleRepository,
   GetExampleRepository,
 } from '@/data/protocols/db/example';
-import { EXAMPLE_DB, Repository } from '@/infra/db/mssql/util';
+import { EXAMPLE_DB, Repository } from '@/infra/db/mysql/util';
 import {
   convertCamelCaseKeysToSnakeCase,
   filterKeys,

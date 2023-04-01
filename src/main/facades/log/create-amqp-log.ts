@@ -1,15 +1,13 @@
-import { InputAndOutputLogRepository } from '@/infra/db/mongodb/input-and-output-log/input-and-output-log-repository';
-import { getAPMTransactionIds, LOGGER } from '@/util';
+import { generateUuid, logger, LOGGER } from '@/util';
 
 export const createAmqpLog = async (payload: object): Promise<void> => {
   if (!LOGGER.DB.ENABLED) return;
 
-  const ids = getAPMTransactionIds();
-
-  await new InputAndOutputLogRepository().create({
+  logger.log({
+    level: 'info',
+    message: 'APM LOG AMQP',
     type: 'AMQP',
-    traceId: ids?.traceId,
-    transactionId: ids?.transactionId,
+    traceId: generateUuid(),
     ...payload,
   });
 };

@@ -29,7 +29,7 @@ type dbSubtype =
   | 'mssql'
   | 'mysql'
   | 'oracle'
-  | 'postgresql'
+  | 'mysqlql'
   | 'redis'
   | 'sqlite'
   | 'sqlite3'

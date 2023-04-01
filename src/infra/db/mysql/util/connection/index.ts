@@ -5,14 +5,13 @@ import { knex } from '../knex';
 
 export const sqlConnection = knex({
   client: DB.DIALECT,
+  version: '5.7',
   connection: {
     host: DB.HOST,
     port: +DB.PORT,
     user: DB.USERNAME,
     password: DB.PASSWORD,
     options: {
-      encrypt: false,
-      enableArithAbort: false,
       appName: pkg.name,
     },
   },

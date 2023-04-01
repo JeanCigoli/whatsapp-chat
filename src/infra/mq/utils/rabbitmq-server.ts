@@ -4,7 +4,6 @@ import {
   convertSnakeCaseKeysToCamelCase,
 } from '@/util';
 import { logger } from '@/util/observability';
-import { apmSpan, apmTransaction } from '@/util/observability/apm';
 import { logger as loggerDecorator } from '@/util/observability/loggers/decorators';
 import { Channel, connect, Connection, Message } from 'amqplib';
 
@@ -66,10 +65,6 @@ export class RabbitMqServer {
     options: { name: 'Publish message in queue', subType: 'rabbitmq' },
     input: { queue: 0, message: 1, headers: 2 },
   })
-  @apmSpan({
-    options: { name: 'Publish message in queue', subType: 'rabbitmq' },
-    params: { queue: 0, message: 1, headers: 2 },
-  })
   public async publishInQueue(queue: string, message: object, headers: object) {
     if (!this.connection || !this.channel) await this.restart();
     const messageFromBuffer = this.messageFromBuffer(
@@ -83,10 +78,6 @@ export class RabbitMqServer {
   @loggerDecorator({
     options: { name: 'Publish message in exchange', subType: 'rabbitmq' },
     input: { exchange: 0, message: 1, routingKey: 2, headers: 3 },
-  })
-  @apmSpan({
-    options: { name: 'Publish message in exchange', subType: 'rabbitmq' },
-    params: { exchange: 0, message: 1, routingKey: 2, headers: 3 },
   })
   public async publishInExchange(
     exchange: string,
@@ -117,10 +108,6 @@ export class RabbitMqServer {
   @amqpLogger({
     options: { nameByParameter: 0, subType: 'rabbitmq' },
     input: { message: 1 },
-  })
-  @apmTransaction({
-    options: { nameByParameter: 0, type: 'rabbitmq' },
-    params: { message: 1 },
   })
   private async startTransaction(
     _queue: string,

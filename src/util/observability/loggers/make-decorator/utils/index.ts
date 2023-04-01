@@ -75,7 +75,7 @@ export const getType = (subType: string | null | undefined): string | void => {
         'mssql',
         'mysql',
         'oracle',
-        'postgresql',
+        'mysqlql',
         'redis',
         'sqlite',
         'sqlite3',

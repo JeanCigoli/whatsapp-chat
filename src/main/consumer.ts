@@ -1,8 +1,7 @@
-import { sqlConnection } from '@/infra/db/mssql/util';
+import { sqlConnection } from '@/infra/db/mysql/util';
 import { rabbitMqServer } from '@/infra/mq/utils';
 import { consumersSetup } from '@/main/configs/consumers';
-import { logger, MONGO, RABBIT } from '@/util';
-import mongoose from 'mongoose';
+import { logger, RABBIT } from '@/util';
 
 (async () => {
   try {
@@ -17,17 +16,9 @@ import mongoose from 'mongoose';
 
     const rabbitPromise = server.start();
 
-    mongoose.set('strictQuery', false);
-
-    const mongoPromise = mongoose.connect(MONGO.URL(), {
-      dbName: MONGO.NAME,
-      authSource: MONGO.AUTH_SOURCE,
-      authMechanism: 'SCRAM-SHA-1',
-    });
-
     const sqlPromise = sqlConnection.raw('SELECT 1');
 
-    await Promise.all([rabbitPromise, mongoPromise, sqlPromise]);
+    await Promise.all([rabbitPromise, sqlPromise]);
 
     consumersSetup(server);
     logger.log({ level: 'info', message: 'Consumer started!' });

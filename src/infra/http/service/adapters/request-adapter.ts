@@ -4,11 +4,7 @@ import {
   HttpResponse,
 } from '@/data/protocols/http/adapters';
 import { logger } from '@/util';
-import { apmSpan } from '@/util/observability/apm';
-import {
-  datoraHttpLogger,
-  logger as customLogger,
-} from '@/util/observability/loggers/decorators';
+import { logger as customLogger } from '@/util/observability/loggers/decorators';
 import Agent from 'agentkeepalive';
 import { AxiosInstance } from 'axios';
 
@@ -49,11 +45,10 @@ export class RequestAdapter implements HttpClient {
     });
   }
 
-  @datoraHttpLogger()
-  @apmSpan({
+  @customLogger({
     options: decorators.options,
-    params: decorators.params,
-    result: decorators.result,
+    input: decorators.params,
+    output: decorators.result,
   })
   async request(data: HttpRequest): Promise<HttpResponse> {
     const axiosResponse = await this.axios({

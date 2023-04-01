@@ -28,15 +28,11 @@ export const ENCRYPTION = {
 };
 
 export const API = {
-  AUTHENTICATOR: process.env.API_AUTHENTICATOR || '',
-  CARD_MANAGEMENT: process.env.API_CARD_MANAGEMENT || '',
-  TRANSACTION_MANAGEMENT: process.env.API_TRANSACTION_MANAGEMENT || '',
-  TELECALL_TOKEN_MANAGEMENT: process.env.API_TELECALL_TOKEN_MANAGEMENT || '',
-  TELECALL: process.env.API_TELECALL || '',
+  WHATSAPP: process.env.API_WHATSAPP || '',
 };
 
 export const DB = {
-  DIALECT: process.env.DB_DIALECT || 'mssql',
+  DIALECT: process.env.DB_DIALECT || 'pg',
   HOST: process.env.DB_HOST || '',
   USERNAME: process.env.DB_USERNAME || '',
   PASSWORD: process.env.DB_PASSWORD || '',
@@ -48,32 +44,6 @@ export const RABBIT = {
   PASSWORD: process.env.RABBIT_PASSWORD || '',
   HOST: process.env.RABBIT_HOST || '',
   PORT: process.env.RABBIT_PORT || 5672,
-};
-
-export const MONGO = {
-  USER: process.env.MONGO_USER || '',
-  PASSWORD: process.env.MONGO_PASSWORD || '',
-  HOST: process.env.MONGO_HOST || '',
-  PORT: process.env.MONGO_PORT || 27017,
-  NAME: process.env.MONGO_NAME || '',
-  AUTH_SOURCE: process.env.MONGO_AUTH_SOURCE || '',
-  URL() {
-    return `mongodb://${this?.USER}:${this.PASSWORD}@${this.HOST}:${this.PORT}`;
-  },
-};
-
-export const APM = {
-  ENABLED: stringToBoolean(process.env.APM_ENABLED) || false,
-  SECRET_TOKEN: process.env.APM_SECRET_TOKEN || '',
-  SERVER_URL: process.env.APM_SERVER_URL || '',
-  ENVIRONMENT: process.env.APM_ENVIRONMENT || '',
-};
-
-export const ELASTICSEARCH = {
-  ENABLED: stringToBoolean(process.env.ELASTICSEARCH_ENABLED) || false,
-  USERNAME: process.env.ELASTICSEARCH_USERNAME || '',
-  PASSWORD: process.env.ELASTICSEARCH_PASSWORD || '',
-  SERVER_URL: process.env.ELASTICSEARCH_SERVER_URL || '',
 };
 
 export const REPROCESSING = {

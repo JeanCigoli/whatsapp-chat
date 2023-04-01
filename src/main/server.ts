@@ -1,23 +1,14 @@
-import { sqlConnection } from '@/infra/db/mssql/util/connection';
+import { sqlConnection } from '@/infra/db/mysql/util/connection';
 import { logger } from '@/util';
-import { MONGO, SERVER } from '@/util/constants';
-import mongoose from 'mongoose';
+import { SERVER } from '@/util/constants';
 
 import { application } from './application';
 
 application.onStart(async () => {
   try {
-    mongoose.set('strictQuery', false);
-
-    const mongoPromise = mongoose.connect(MONGO.URL(), {
-      dbName: MONGO.NAME,
-      authSource: MONGO.AUTH_SOURCE,
-      authMechanism: 'SCRAM-SHA-1',
-    });
-
     const sqlPromise = sqlConnection.raw('SELECT 1');
 
-    await Promise.all([mongoPromise, sqlPromise]);
+    await Promise.all([sqlPromise]);
   } catch (error) {
     logger.log(error);
     throw error;
